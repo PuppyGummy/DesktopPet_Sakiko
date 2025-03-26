@@ -3,12 +3,20 @@ using UnityEngine.UI;
 
 public class DebugLogger : MonoBehaviour
 {
-    public static Text logText;
-    //singleton
+    public Text logText;
+    public static DebugLogger Instance { get; private set; }
 
     void Start()
     {
-        logText = GetComponent<Text>();
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
     }
 
     // Update is called once per frame
@@ -16,7 +24,7 @@ public class DebugLogger : MonoBehaviour
     {
 
     }
-    public static void Log(string message)
+    public void Log(string message)
     {
         logText.text = message;
     }

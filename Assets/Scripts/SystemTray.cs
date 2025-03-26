@@ -8,6 +8,7 @@ using ContextMenu = System.Windows.Forms.ContextMenu;
 using System.Drawing;
 using Application = UnityEngine.Application;
 using SatorImaging.AppWindowUtility;
+using System.IO;
 
 public class SystemTray : MonoBehaviour
 {
@@ -24,12 +25,37 @@ public class SystemTray : MonoBehaviour
     {
         Windows.HideFromTaskbar();
 
-        trayIcon = new NotifyIcon
+        // 初始化托盘图标
+        trayIcon = new NotifyIcon();
+
+        string iconPath = Path.Combine(Application.streamingAssetsPath, "Sakiko.ico");
+        Debug.Log($"Loading icon from: {iconPath}");
+
+        if (!File.Exists(iconPath))
         {
-            Icon = SystemIcons.Application,
-            Text = "Sakiko Desktop Pet",
-            Visible = true
-        };
+            Debug.LogError("Icon file missing at: " + iconPath);
+            trayIcon.Icon = SystemIcons.Application;
+        }
+        else
+        {
+            try
+            {
+                // 使用文件流安全加载
+                using (var stream = new FileStream(iconPath, FileMode.Open))
+                {
+                    Debug.Log("Icon loaded successfully");
+                    trayIcon.Icon = new Icon(stream);
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Failed to load icon: {e.Message}");
+                // trayIcon.Icon = SystemIcons.Application;
+            }
+        }
+        // 其他设置
+        trayIcon.Text = "Sakiko Desktop Pet";
+        trayIcon.Visible = true;
 
         ContextMenu contextMenu = new ContextMenu();
         contextMenu.MenuItems.Add("退出", ExitApp);

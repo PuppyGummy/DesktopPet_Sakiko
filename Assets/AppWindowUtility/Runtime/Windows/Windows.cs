@@ -208,12 +208,12 @@ namespace SatorImaging.AppWindowUtility
 
                 if (ClickThroughPixel)
                 {
-                    DebugLogger.Log("ClickThroughPixel: " + ClickThroughPixel);
+                    // DebugLogger.Log("ClickThroughPixel: " + ClickThroughPixel);
                     WinApi.SetWindowLong(hWnd, WinApi.GWL_EXSTYLE, newStyle);
                 }
                 else
                 {
-                    DebugLogger.Log("ClickThroughPixel: " + ClickThroughPixel);
+                    // DebugLogger.Log("ClickThroughPixel: " + ClickThroughPixel);
                     WinApi.SetWindowLong(hWnd, WinApi.GWL_EXSTYLE,
                         (newStyle & ~WinApi.WS_EX_TRANSPARENT)); // 明确移除TRANSPARENT
                 }
